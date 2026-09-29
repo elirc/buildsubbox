@@ -1,0 +1,29 @@
+# Verification and limits
+
+The implementation combines pure domain/storage assertions, a production build, and disposable Chromium workflows. The central implementation report records the completed delivery manifest and evidence. Generated logs and screenshots are separate from operational browser storage.
+
+## What to run
+
+From the project root, run `npm.cmd test` and `npm.cmd run build`. The 36 domain and repository tests produce `.verification/unit-results.json` and `.verification/unit.log`. The optional [browser verifier](../scripts/verify_browser.py) has 18 user-workflow scenarios. Setup and environment options are documented in [testing and debugging](04-TESTING-AND-DEBUGGING.md).
+
+Fast cases cover all three catalog entity types, reference and range checks, normalized unique subscriber email, rating edits, eligibility rules, exact item counts, immutable receipt facts, one-unit stock reservations, once-only cancellation, lifecycle versions, request replay, subscriber-month uniqueness, corrupt-data recovery, and stale baselines. The last-unit test accepts one complete competing reservation. Another adapter writes successfully and then throws to test uncertain acknowledgement.
+
+Browser scenarios exercise actual forms, localStorage, separate tabs, downloads, rating controls, stock persistence, cancellation, tracking, duplicate cycles, immutable contents, retained drafts, pagination, reviewed import, and desktop/tablet/phone layouts. Contexts are disposable, and the verifier owns its preview process. It refuses to reuse an occupied port and does not stop unrelated servers.
+
+## Simulation boundary
+
+The app has no authentication, authorization, server API, SQL database, payment provider, recurring scheduler, tax engine, email service, carrier booking, tracking lookup, physical inventory count, or return workflow. Shipment statuses are local records. Recording a tracking reference does not dispatch a parcel. Cancellation returns locally reserved units but requests no financial refund.
+
+The subscriber-month uniqueness policy includes cancelled history. Same-cycle replacements and a dedicated skip ledger are exercises, not implemented features. Manual stock adjustments update available counts and versions without a complete stock-movement journal. Recommendation scores use supplied tags and ratings; they are not probabilities and do not infer absent metadata.
+
+## Persistence boundary
+
+The aggregate is bounded to four MiB, one thousand items, one hundred plans, one thousand subscribers, and two thousand shipments. Each accepted change rewrites one document. Web Locks coordinate cooperating same-origin writers only. Browser-profile access or another script can bypass these rules. The tests do not certify power-loss durability, every browser engine, complete accessibility, or production deployment hardening.
+
+Editors, builder selections, tracking drafts and frozen requests remain in tab memory. Exports preserve reference material for manual review; automatic draft import and durable attempt resumption are not implemented. A complete backup can replace the workspace only after review and confirmation, and may remove current records absent from that file. Corrupt original bytes remain available for export until explicit replacement.
+
+Original [upskilling notes](../docs/upskill/README.md) are retained as historical context. Their descriptions may refer to the older prototype. Use the current source, executable checks, and this delivery's report to distinguish implemented behavior from future design. Update these limits alongside any extension that introduces new state, external effects, or operational recovery requirements.
+
+## Completed run
+
+All 36 domain/storage tests and all 18 Chromium scenarios passed, and the production Vite build passed. Seven screenshots were reviewed: [desktop overview](images/overview-1440.png), [desktop editor](images/editor-1440.png), [tablet overview](images/overview-800.png), [tablet editor](images/editor-800.png), [phone overview](images/overview-390.png), [phone editor](images/editor-390.png), and [phone box builder](images/builder-390.png). Browser review led to explicit catalog selector names and removal of the obsolete metric icon column; final layout checks include non-overlapping metric labels and values.
