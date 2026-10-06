@@ -18,4 +18,4 @@ npm.cmd run build
 
 See [browser verification](astraupskill/04-TESTING-AND-DEBUGGING.md) and [limits](astraupskill/VERIFICATION.md). Export a complete workspace before experiments. Draft and operation exports are for manual review, not automatic workspace import.
 
-A reservation deducts one available unit per selected item and stores the subscriber-month receipt together. Cancellation before dispatch returns units once and retains history. Cancelled cycles remain unique; replacement shipments are a future exercise. Original documentation remains under [docs/upskill](docs/upskill/README.md) as historical context.
+A reservation deducts one available unit per selected item and stores the subscriber-month receipt together. Cancellation before dispatch returns units once and retains history. Cancelled cycles remain unique; replacement shipments are a future exercise. The older [docs/upskill](docs/upskill/README.md) tree described the pre-rewrite prototype; its pages now point into `astraupskill/`.

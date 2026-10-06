@@ -1,12 +1,5 @@
 # Quality Engineering
 
-Quality here means making changes that stay correct. This repo currently has build verification but no automated tests, linting, typecheck, CI, monitoring, or backend observability.
-
-Read:
-
-1. [01-testing-strategy.md](01-testing-strategy.md)
-2. [02-writing-tests-here.md](02-writing-tests-here.md)
-3. [03-systematic-debugging.md](03-systematic-debugging.md)
-4. [04-performance-thinking.md](04-performance-thinking.md)
-5. [05-security-checklist.md](05-security-checklist.md)
-6. [06-observability-and-operations.md](06-observability-and-operations.md)
+> **Superseded — 2026-10-06.** This page was written for the earlier ParcelPilot prototype: one large `src/App.jsx` with skip-next, simulated billing and a fulfillment pipeline, seeded from `src/data.js`, with no tests. That code was replaced by the pure domain module `src/model.js`, the storage layer `src/repository.js`, and a 36-case test suite, so this page's line anchors and flows no longer exist in the source.
+>
+> Use [testing and debugging](../../../astraupskill/04-TESTING-AND-DEBUGGING.md) instead. The original text is kept in git history: `git show 9597ad1:docs/upskill/05-quality-engineering/README.md`.

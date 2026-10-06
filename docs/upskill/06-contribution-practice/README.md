@@ -1,10 +1,5 @@
 # Contribution Practice
 
-This module turns reading into contribution. The repository is small, so many tickets are local frontend changes or scaffolding work. Larger tickets are framed as design-first because production billing, persistence, and workers do not exist yet.
-
-Files:
-
-- [01-good-first-tickets.md](01-good-first-tickets.md)
-- [02-mid-level-feature-tickets.md](02-mid-level-feature-tickets.md)
-- [03-senior-build-projects.md](03-senior-build-projects.md)
-- [04-refactor-and-design-katas.md](04-refactor-and-design-katas.md)
+> **Superseded — 2026-10-06.** This page was written for the earlier ParcelPilot prototype: one large `src/App.jsx` with skip-next, simulated billing and a fulfillment pipeline, seeded from `src/data.js`, with no tests. That code was replaced by the pure domain module `src/model.js`, the storage layer `src/repository.js`, and a 36-case test suite, so this page's line anchors and flows no longer exist in the source.
+>
+> Use [the practice ladder](../../../astraupskill/05-PRACTICE.md) instead. The original text is kept in git history: `git show 9597ad1:docs/upskill/06-contribution-practice/README.md`.

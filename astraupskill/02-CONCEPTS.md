@@ -28,9 +28,19 @@ New reservations evaluate current eligibility. Historical validation checks inte
 
 An item must be active, in stock, and free of the subscriber's excluded tags before it enters recommendations or a quote. Exclusion is a hard eligibility rule, not a small score penalty. Preferred-tag matches and ratings then order the eligible candidates. Scores are ranking values, not percentages or measured prediction accuracy. Matching uses the provided catalog tags and does not infer missing product metadata.
 
+## Concurrency control is whole-workspace
+
+`commit` (`src/repository.js:11-24`) runs inside a Web Lock and, for anything that is not a replayed reservation, compares the raw stored string with the raw string the tab started from. Any accepted write changes those bytes. So the check is optimistic concurrency on the **entire workspace**, not on the record being edited:
+
+- In the last-unit test, the losing reservation is rejected by the baseline comparison ("Workspace changed in another tab") before `reduce` ever looks at stock. The stock rule is still enforced by `reduce`, but in that race it never gets the chance.
+- Two operators editing unrelated records conflict just the same. Record `version` values exist, but the repository rejects on the coarser signal first.
+- Only reservations are idempotent. `replay` returns early for every other command type (`src/model.js:430`), so a lost acknowledgement on a save or a lifecycle transition turns the retry into a misleading "changed in another tab" error even though the write landed (Practice Exercise 5 reproduces it).
+
+That is a defensible choice for a single-operator local tool — it is simple and never merges blindly — but it is the first thing to change before several people share one workspace.
+
 ## Concurrency is separate from authentication
 
-Web Locks serialize cooperating same-origin writers. Raw baseline comparison rejects drafts based on older storage, including an older workspace later replaced by import. Record versions explain which edition was edited; the workspace revision describes aggregate changes.
+Web Locks serialize cooperating same-origin writers. Raw baseline comparison rejects drafts based on older storage, including an older workspace later replaced by import. Record versions explain which edition was edited; the workspace revision counts accepted aggregate changes.
 
 None of this authenticates a user. Developer tools or another script can bypass the repository. A deployed CRUD app needs server-side identity, authorization, database transactions, and operational recovery. Study [the executable cases](../test/model.test.mjs) as contracts you could carry across that boundary, not as proof that browser storage is a production database.
 
@@ -40,16 +50,16 @@ None of this authenticates a user. Developer tools or another script can bypass 
 |---|---|---|
 | aggregate | the whole state validated and replaced as one value | `validateState`, `encode`/`decode` |
 | candidate | the next state, computed but not yet accepted | the return value of `reduce` before the repository writes it |
-| baseline | the raw stored string the tab last read; compared before writing | `repository.js` (baseline compare), used by `replay` |
-| fingerprint | a hash of a quote's meaningful content, so equal quotes are one quote | `fingerprint(cycle, q)` |
-| request key | the caller-chosen id of one attempt, so a retry finds its receipt | `requestKey` on orders, checked by `replay` |
+| baseline | the raw stored string the tab last read; compared with current storage inside the lock before writing | `commit` and `restore` in `repository.js` (not used by `replay`) |
+| fingerprint | a canonical `JSON.stringify` of the cycle plus every accepted quote fact (not a hash), so equal requests compare equal | `fingerprint(cycle, q)` |
+| request key | the caller-chosen id of one reservation attempt, so a retry finds its receipt | `requestKey` on reserve commands and shipments, checked by `replay`; unique across shipments in `validateState` |
 | revision | the aggregate's counter, bumped on every accepted write | `validateState` (`revision`), `reduce` |
 | version | one record's counter, bumped when that record changes | `version(v)` on items/plans/subscribers |
 | snapshot / line | the accepted copy of item facts frozen into a shipment line | `quoteBox` output lines |
 | reducer | `(state, command) -> state`, pure, the only way state changes | `reduce` |
 | replay | returning the stored receipt for a repeated request key | `replay` |
-| available stock | on-hand minus what accepted lines have reserved | `eligible`, `quoteBox` |
-| Web Lock | the browser lock that serializes one tab's write against another's | `navigator.locks` in `repository.js` |
+| available stock | the `stock` field itself: decremented on reserve, incremented on cancel; there is no separate on-hand count | `reduce` (reserve and Cancelled branches), checked by `eligible` |
+| Web Lock | the browser lock that serializes one tab's write against another's | `browserLock` → `navigator.locks.request` in `repository.js` |
 | cycle | the month a box belongs to; part of the fingerprint | `month(v)` |
 | eligibility | the rules a subscriber's preferences impose before scoring | `eligible`, `recommendations` |
 | money | integer cents, parsed from a bounded decimal string | `parseMoney`, `money` |

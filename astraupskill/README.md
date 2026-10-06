@@ -24,7 +24,7 @@ Cancel a reservation before dispatch and verify that stock returns once. Its sub
 1. Use [the codebase map](01-CODEBASE-MAP.md) to trace form input through the repository and model.
 2. Study [the concepts](02-CONCEPTS.md), then reproduce [the worked reservation](03-WORKED-CHANGE.md).
 3. Run [tests and debugging drills](04-TESTING-AND-DEBUGGING.md), especially the stale-tab and lost-acknowledgement cases.
-4. Attempt [the practice ladder](05-PRACTICE.md) before reading [solution sketches](06-SOLUTIONS-AND-REVIEW.md).
+4. Attempt [the practice ladder](05-PRACTICE.md) — five verified exercises, then four build projects — before reading [solution sketches](06-SOLUTIONS-AND-REVIEW.md).
 5. Complete [the trace lab](07-TRACE-LAB.md) and compare your conclusions with [verification limits](VERIFICATION.md).
 
 A junior milestone is adding a validated field across form, model and backup format. A mid-level milestone is explaining transaction scope, lifecycle invariants, idempotency, historical snapshots, and recovery after an uncertain result. Spend time predicting failures before running the tests. That habit is more useful than memorizing component names.
@@ -33,6 +33,6 @@ A junior milestone is adding a validated field across form, model and backup for
 
 Export a complete workspace backup before schema experiments. Editor exports and operation exports are reference documents for manual review; they are not importable workspace backups. Editors, selected box items, tracking drafts and frozen attempts remain in tab memory and are cleared by an explicitly confirmed reload.
 
-Use fictional subscriber addresses and emails. Browser storage is not an authentication boundary. Original documentation remains under `docs/upskill` as historical context. The new course describes implemented behavior and calls out extensions separately, so you can distinguish a working local operation from a proposed production system.
+Use fictional subscriber addresses and emails. Browser storage is not an authentication boundary. The older `docs/upskill` tree described the pre-rewrite prototype and now only points here. This course describes implemented behavior and calls out extensions separately, so you can distinguish a working local operation from a proposed production system.
 
-Practice exercise 5 has a worked target: [08-SERVER-COMPANION.md](08-SERVER-COMPANION.md) (Express + SQLite with `Idempotency-Key`, a unique constraint per cycle and a compare-and-set stock update, mapped line by line onto `reduce`/`replay`).
+Practice Exercise 9 has a design sketch to start from: [08-SERVER-COMPANION.md](08-SERVER-COMPANION.md) (Express + SQLite with `Idempotency-Key`, a unique constraint per cycle and a conditional stock update, mapped line by line onto `reduce`/`replay`; not executed).

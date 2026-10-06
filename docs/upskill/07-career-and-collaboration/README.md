@@ -1,10 +1,5 @@
 # Career And Collaboration
 
-Senior growth is not only code. It is how you review, explain tradeoffs, write PRs, ask for help, and turn repo work into interview stories.
-
-Files:
-
-- [01-code-review-mindset.md](01-code-review-mindset.md)
-- [02-writing-prs-and-rfcs.md](02-writing-prs-and-rfcs.md)
-- [03-maintainer-communication.md](03-maintainer-communication.md)
-- [04-interview-prep-from-this-repo.md](04-interview-prep-from-this-repo.md)
+> **Superseded — 2026-10-06.** This page was written for the earlier ParcelPilot prototype: one large `src/App.jsx` with skip-next, simulated billing and a fulfillment pipeline, seeded from `src/data.js`, with no tests. That code was replaced by the pure domain module `src/model.js`, the storage layer `src/repository.js`, and a 36-case test suite, so this page's line anchors and flows no longer exist in the source.
+>
+> Use [the review rubric](../../../astraupskill/06-SOLUTIONS-AND-REVIEW.md) instead. The original text is kept in git history: `git show 9597ad1:docs/upskill/07-career-and-collaboration/README.md`.

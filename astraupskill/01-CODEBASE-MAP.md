@@ -33,6 +33,10 @@ The UI sends shipment ID, expected version, requested next status, and timestamp
 
 Draw the write path and mark where data is merely a draft, where it is a validated candidate, and where it is accepted. Then locate the error paths that preserve input. Your map should explain which layer owns each guarantee rather than simply listing imports.
 
+## Line anchors in `src/App.jsx` and `src/CatalogEditor.jsx`
+
+`src/App.jsx:6-13` wires `repository` to `localStorage` and `browserLock` · `:35-46 readWorkspace` (load, keep corrupt bytes for export) · `:143 accept` · `:148-167 save` (the only caller of `repo.commit`) · `:168 edit` (captures record, expected version and baseline) · `:229-255 reserve` (builds or reuses the frozen `attempt`) · `:256-279 transition` · `src/CatalogEditor.jsx:60-81 submit` (trim, lowercase email, `parseMoney`, split tags, then `onSave`).
+
 ## Line anchors in `src/model.js`
 
 As of the fix pass (re-generate with `grep -n "^export" src/model.js`):
